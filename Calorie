@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calorie Tracker</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#111;
+    color:white;
+    margin:20px;
+}
+input,button{
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    font-size:18px;
+    border-radius:8px;
+    border:none;
+}
+button{
+    background:#28a745;
+    color:white;
+}
+button:hover{
+    opacity:.9;
+}
+.food{
+    background:#222;
+    padding:10px;
+    margin:8px 0;
+    border-radius:8px;
+}
+.total{
+    font-size:24px;
+    font-weight:bold;
+    margin:15px 0;
+}
+.small{
+    color:#aaa;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🍔 Calorie Tracker</h2>
+
+<input id="food" placeholder="Food">
+<input id="calories" type="number" placeholder="Calories">
+
+<button onclick="addFood()">Add Food</button>
+
+<div class="total">
+Total Calories:
+<span id="total">0</span>
+</div>
+
+<div id="list"></div>
+
+<button onclick="clearAll()" style="background:#cc3333">
+Clear Today
+</button>
+
+<script>
+
+let foods=JSON.parse(localStorage.getItem("foods"))||[];
+
+function save(){
+localStorage.setItem("foods",JSON.stringify(foods));
+}
+
+function timeNow(){
+return new Date().toLocaleTimeString([],{
+hour:'2-digit',
+minute:'2-digit'
+});
+}
+
+function draw(){
+
+let list=document.getElementById("list");
+list.innerHTML="";
+
+let total=0;
+
+foods.forEach((f,i)=>{
+
+total+=Number(f.calories);
+
+list.innerHTML+=`
+<div class="food">
+<b>${f.food}</b><br>
+${f.calories} Calories<br>
+<span class="small">${f.time}</span><br><br>
+<button onclick="removeFood(${i})">
+Delete
+</button>
+</div>
+`;
+
+});
+
+document.getElementById("total").innerText=total;
+
+save();
+
+}
+
+function addFood(){
+
+let food=document.getElementById("food").value.trim();
+
+let calories=document.getElementById("calories").value;
+
+if(food==""||calories=="") return;
+
+foods.push({
+food:food,
+calories:Number(calories),
+time:timeNow()
+});
+
+document.getElementById("food").value="";
+document.getElementById("calories").value="";
+
+draw();
+
+}
+
+function removeFood(i){
+foods.splice(i,1);
+draw();
+}
+
+function clearAll(){
+
+if(confirm("Clear today's calories?")){
+
+foods=[];
+
+draw();
+
+}
+
+}
+
+draw();
+
+</script>
+
+</body>
+</html>
