@@ -1,0 +1,157 @@
+<p>&lt;!******* html&gt;</p>
+<p>&lt;html lang=&quot;en&quot;&gt;</p>
+<p>&lt;head&gt;</p>
+<p>&lt;meta charset=&quot;UTF-8&quot;&gt;</p>
+<p>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;</p>
+<p>&lt;title&gt;******* Tracker&lt;/title&gt;</p>
+<p><br></p>
+<p>&lt;style&gt;</p>
+<p>body{</p>
+<p>&nbsp; &nbsp; font-family:Arial,sans-serif;</p>
+<p>&nbsp; &nbsp; background:#111;</p>
+<p>&nbsp; &nbsp; color:white;</p>
+<p>&nbsp; &nbsp; margin:20px;</p>
+<p>}</p>
+<p>input,button{</p>
+<p>&nbsp; &nbsp; width:100%;</p>
+<p>&nbsp; &nbsp; padding:12px;</p>
+<p>&nbsp; &nbsp; margin:6px 0;</p>
+<p>&nbsp; &nbsp; font-size:18px;</p>
+<p>&nbsp; &nbsp; border-radius:8px;</p>
+<p>&nbsp; &nbsp; border:none;</p>
+<p>}</p>
+<p>button{</p>
+<p>&nbsp; &nbsp; background:#28a745;</p>
+<p>&nbsp; &nbsp; color:white;</p>
+<p>}</p>
+<p>button:hover{</p>
+<p>&nbsp; &nbsp; opacity:.9;</p>
+<p>}</p>
+<p>.food{</p>
+<p>&nbsp; &nbsp; background:#222;</p>
+<p>&nbsp; &nbsp; padding:10px;</p>
+<p>&nbsp; &nbsp; margin:8px 0;</p>
+<p>&nbsp; &nbsp; border-radius:8px;</p>
+<p>}</p>
+<p>.total{</p>
+<p>&nbsp; &nbsp; font-size:24px;</p>
+<p>&nbsp; &nbsp; font-weight:bold;</p>
+<p>&nbsp; &nbsp; margin:15px 0;</p>
+<p>}</p>
+<p>.small{</p>
+<p>&nbsp; &nbsp; color:#aaa;</p>
+<p>&nbsp; &nbsp; font-size:14px;</p>
+<p>}</p>
+<p>&lt;/style&gt;</p>
+<p>&lt;/head&gt;</p>
+<p><br></p>
+<p>&lt;body&gt;</p>
+<p><br></p>
+<p>&lt;h2&gt;🍔 Calorie Tracker&lt;/h2&gt;</p>
+<p><br></p>
+<p>&lt;***** id=&quot;food&quot; placeholder=&quot;Food&quot;&gt;</p>
+<p>&lt;***** id=&quot;calories&quot; type=&quot;number&quot; placeholder=&quot;Calories&quot;&gt;</p>
+<p><br></p>
+<p>&lt;button onclick=&quot;addFood()&quot;&gt;*** Food&lt;/button&gt;</p>
+<p><br></p>
+<p>&lt;div class=&quot;total&quot;&gt;</p>
+<p>Total Calories:</p>
+<p>&lt;span id=&quot;total&quot;&gt;0&lt;/span&gt;</p>
+<p>&lt;/div&gt;</p>
+<p><br></p>
+<p>&lt;div id=&quot;list&quot;&gt;&lt;/div&gt;</p>
+<p><br></p>
+<p>&lt;button onclick=&quot;clearAll()&quot; style=&quot;background:#cc3333&quot;&gt;</p>
+<p>***** Today</p>
+<p>&lt;/button&gt;</p>
+<p><br></p>
+<p>&lt;script&gt;</p>
+<p><br></p>
+<p>let foods=JSON.parse(localStorage.getItem(&quot;foods&quot;))||[];</p>
+<p><br></p>
+<p>function save(){</p>
+<p>localStorage.setItem(&quot;foods&quot;,JSON.stringify(foods));</p>
+<p>}</p>
+<p><br></p>
+<p>function timeNow(){</p>
+<p>return new Date().toLocaleTimeString([],{</p>
+<p>hour:&apos;2-digit&apos;,</p>
+<p>minute:&apos;2-digit&apos;</p>
+<p>});</p>
+<p>}</p>
+<p><br></p>
+<p>function draw(){</p>
+<p><br></p>
+<p>let list=document.getElementById(&quot;list&quot;);</p>
+<p>list.innerHTML=&quot;&quot;;</p>
+<p><br></p>
+<p>let total=0;</p>
+<p><br></p>
+<p>foods.forEach((f,i)=&gt;{</p>
+<p><br></p>
+<p>total+=Number(f.calories);</p>
+<p><br></p>
+<p>list.innerHTML+=`</p>
+<p>&lt;div class=&quot;food&quot;&gt;</p>
+<p>&lt;b&gt;${f.food}&lt;/b&gt;&lt;br&gt;</p>
+<p>${f.calories} Calories&lt;br&gt;</p>
+<p>&lt;span class=&quot;small&quot;&gt;${f.time}&lt;/span&gt;&lt;br&gt;&lt;br&gt;</p>
+<p>&lt;button onclick=&quot;removeFood(${i})&quot;&gt;</p>
+<p>Delete</p>
+<p>&lt;/button&gt;</p>
+<p>&lt;/div&gt;</p>
+<p>`;</p>
+<p><br></p>
+<p>});</p>
+<p><br></p>
+<p>document.getElementById(&quot;total&quot;).innerText=total;</p>
+<p><br></p>
+<p>save();</p>
+<p><br></p>
+<p>}</p>
+<p><br></p>
+<p>function addFood(){</p>
+<p><br></p>
+<p>let food=document.getElementById(&quot;food&quot;).value.trim();</p>
+<p><br></p>
+<p>let calories=document.getElementById(&quot;calories&quot;).value;</p>
+<p><br></p>
+<p>if(food==&quot;&quot;||calories==&quot;&quot;) return;</p>
+<p><br></p>
+<p>foods.push({</p>
+<p>food:food,</p>
+<p>calories:Number(calories),</p>
+<p>time:timeNow()</p>
+<p>});</p>
+<p><br></p>
+<p>document.getElementById(&quot;food&quot;).value=&quot;&quot;;</p>
+<p>document.getElementById(&quot;calories&quot;).value=&quot;&quot;;</p>
+<p><br></p>
+<p>draw();</p>
+<p><br></p>
+<p>}</p>
+<p><br></p>
+<p>function removeFood(i){</p>
+<p>foods.splice(i,1);</p>
+<p>draw();</p>
+<p>}</p>
+<p><br></p>
+<p>function clearAll(){</p>
+<p><br></p>
+<p>if(confirm(&quot;Clear today&apos;s calories?&quot;)){</p>
+<p><br></p>
+<p>foods=[];</p>
+<p><br></p>
+<p>draw();</p>
+<p><br></p>
+<p>}</p>
+<p><br></p>
+<p>}</p>
+<p><br></p>
+<p>draw();</p>
+<p><br></p>
+<p>&lt;/script&gt;</p>
+<p><br></p>
+<p>&lt;/body&gt;</p>
+<p>&lt;/html&gt;</p>
+<div style="color: red">Word to HTML trial - please <a href="https://wordtohtml.net/site/payment">Go PRO</a> to get whole HTML.</div>
